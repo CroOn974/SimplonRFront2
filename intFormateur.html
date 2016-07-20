@@ -159,11 +159,11 @@ L'application pourra permettre de lier une note pour chaque apprenant.
 
                                         <p><strong>Skills :</strong> {[{ user.trainer.skills }]}</p>
 
-                                        <a ng-click="trainerCtrl.selectTrainer(trainer.id)" class="waves-effect waves-light btn margin-bottom-1em"><i
+                                        <a ng-click="trainerCtrl.selectTrainer(user.id)" class="waves-effect waves-light btn margin-bottom-1em"><i
                                            class="material-icons left">edit</i>Edit</a>
                                 </div>
 
-                                    <a ng-click="trainerCtrl.deleteTrainer(trainer.id)" class="waves-effect waves-light btn margin-bottom-1em"><i
+                                    <a ng-click="trainerCtrl.deleteTrainer(user.id)" class="waves-effect waves-light btn margin-bottom-1em"><i
 
                                 class="material-icons left">delete</i>Delete</a>
                                         </div>
@@ -241,7 +241,7 @@ L'application pourra permettre de lier une note pour chaque apprenant.
 
                                     <div class="input-field col s12">
 
-                                        <input ng-model="trainerCtrl.skill" type="text" class="validate" id="form-englishlevel" placeholder="Type your english level..." />
+                                        <input ng-model="trainerCtrl.skill" type="text" class="validate" id="form-englishlevel" placeholder="Type your skills..." />
 
                                         <label for="trainerCtrl.skill">Skill</label>
 
@@ -255,7 +255,7 @@ L'application pourra permettre de lier une note pour chaque apprenant.
 
                                     class="material-icons left">add</i>Create</a>
 
-                                        <a id="btn-update-trainer" class="waves-effect waves-light btn margin-bottom-1em" ng-click="trainerCtrl.updateTrainer(trainer.id)"><i
+                                        <a id="btn-update-trainer" class="waves-effect waves-light btn margin-bottom-1em" ng-click="trainerCtrl.updateTrainer(user.id)"><i
 
                                     class="material-icons left">edit</i>Save Changes</a>
 

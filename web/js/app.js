@@ -423,7 +423,7 @@ app.controller('TrainerController', ['$http', function ($http) {
 
       if (store.users[i].id == id){
 
-        return store.id[i];
+        return i;
 
       }
 
@@ -441,20 +441,21 @@ app.controller('TrainerController', ['$http', function ($http) {
     // show create product button
     $('#btn-create-trainer').hide();
 
-    var trainer = getTrainerupdate(id);
-    $http.get('http://127.0.0.1:8000/api/user.json', {
+    var user = getTrainerupdate(id);
+
+    $http.get('http://127.0.0.1:8000/api/users.json', {
         'id': id
     }).success(function (data, status, headers, config) {        // put the values in form
 
-      /*store.id = data[trainer]["id"];
-      store.username = data[trainer]["username"];
-      store.email = data[trainer]["email"];
-      store.password = data[trainer]["password"];
-      store.surname = data[trainer]["trainer"]["surname"];
-      store.firstname = data[trainer]["trainer"]["firstname"];
-      store.adress = data[trainer]["trainer"]["adress"];
-      store.phone = data[trainer]["trainer"]["phone"];
-      store.skills = data[trainer]["trainer"]["store.skills"];*/
+      store.id = data[user]["id"];
+      store.username = data[user]["username"];
+      store.email = data[user]["email"];
+      store.password = data[user]["password"];
+      store.surname = data[user]["trainer"]["surname"];
+      store.firstname = data[user]["trainer"]["firstname"];
+      store.adress = data[user]["trainer"]["adress"];
+      store.phone = data[user]["trainer"]["phone"];
+      store.skill = data[user]["trainer"]["skills"];
 
         $('#modal-trainer-form').openModal();
 
@@ -463,8 +464,72 @@ app.controller('TrainerController', ['$http', function ($http) {
     });
 };
 
+    store.updateTrainer = function () {
 
 
+    $http.put('http://127.0.0.1:8000/api/users/' + store.id + '.json', {
+        'id': store.id,
+
+        'username': store.username,
+
+        'email': store.email,
+
+        'password': store.password,
+
+        'trainer': {
+
+          'surname': store.surname,
+
+          'firstname': store.firstname,
+
+          'adress': store.adress,
+
+          'phone': store.phone,
+
+          'skills': store.skill
+        }
+      }).success(function (data, status, headers, config) {
+
+        Materialize.toast("Le formateur a bien été  modifié", 4000);
+
+        // close modal
+        $('#modal-trainer-form').closeModal();
+
+        // clear modal content
+        store.clearForm();
+
+        // refresh the product list
+        store.getAll();
+      });
+};
+
+store.deleteTrainer = function (id) {
+
+    swal({
+        title: "Are you sure?",
+        text: "This trainer will be gone forever!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, mercy pls",
+        closeOnConfirm: false,
+        closeOnCancel: false
+    }, function (isConfirm) {
+        if (isConfirm) {
+            $http.delete('http://127.0.0.1:8000/api/users/' + id + '.json', {
+                'id': id
+            }).success(function (data, status, headers, config) {
+                // refresh the list
+                store.getAll();
+            });
+            swal("Deleted!", "Your trainer has been deleted.", "success");
+        } else {
+            swal("Cancelled", "Your trainer is safe", "error");
+        }
+    });
+
+};
 
 
 
@@ -524,7 +589,7 @@ app.controller('AdminController', ['$http', function ($http) {
   };
 
   //Fonctions CRUD
-  //Create Trainer
+  //Create Admin
 
   store.createAdmin = function () {
 
@@ -567,6 +632,131 @@ app.controller('AdminController', ['$http', function ($http) {
       });
 
   };
+
+  function getTrainerupdate(id) {
+
+  for (var i = 0; i < store.users.length; i++)
+
+      if (store.users[i].id == id){
+
+        return i;
+
+      }
+
+ };
+
+ store.selectAdmin = function (id) {
+
+    // change modal title
+    //$('#modal-product-title').text("Edit applicant");
+    store.createApplicant = 'Edit Applicant';
+
+    // show udpate product button
+    $('#btn-update-trainer').show();
+
+    // show create product button
+    $('#btn-create-trainer').hide();
+
+    var user = getTrainerupdate(id);
+
+    $http.get('http://127.0.0.1:8000/api/users.json', {
+        'id': id
+    }).success(function (data, status, headers, config) {        // put the values in form
+
+      store.id = data[user]["id"];
+      store.username = data[user]["username"];
+      store.email = data[user]["email"];
+      store.password = data[user]["password"];
+      store.surname = data[user]["administrator"]["surname"];
+      store.firstname = data[user]["administrator"]["firstname"];
+      store.adress = data[user]["administrator"]["adress"];
+      store.phone = data[user]["administrator"]["phone"];
+
+        $('#modal-admin-form').openModal();
+
+    }).error(function (data, status, headers, config) {
+        Materialize.toast('Unable to retrieve record.', 4000);
+    });
+};
+
+    store.updateTrainer = function () {
+
+
+    $http.put('http://127.0.0.1:8000/api/users/' + store.id + '.json', {
+        'id': store.id,
+
+        'username': store.username,
+
+        'email': store.email,
+
+        'password': store.password,
+
+        'administrator': {
+
+          'surname': store.surname,
+
+          'firstname': store.firstname,
+
+          'adress': store.adress,
+
+          'phone': store.phone,
+
+        }
+      }).success(function (data, status, headers, config) {
+
+        Materialize.toast("Le formateur a bien été  modifié", 4000);
+
+        // close modal
+        $('#modal-admin-form').closeModal();
+
+        // clear modal content
+        store.clearForm();
+
+        // refresh the product list
+        store.getAll();
+      });
+};
+
+
+store.deleteAdmin = function (id) {
+
+    swal({
+        title: "Are you sure?",
+        text: "This administrator will be gone forever!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, mercy pls",
+        closeOnConfirm: false,
+        closeOnCancel: false
+    }, function (isConfirm) {
+        if (isConfirm) {
+            $http.delete('http://127.0.0.1:8000/api/users/' + id + '.json', {
+                'id': id
+            }).success(function (data, status, headers, config) {
+                // refresh the list
+                store.getAll();
+            });
+            swal("Deleted!", "Your administrator has been deleted.", "success");
+        } else {
+            swal("Cancelled", "Your administrator is safe", "error");
+        }
+    });
+
+};
+
+//---------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
 
 
 }]);
